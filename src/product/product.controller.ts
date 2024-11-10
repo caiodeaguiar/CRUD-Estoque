@@ -13,7 +13,7 @@ export class ProductController {
     }
 
     @Get()
-    public async getAllProducts(){
+    public async getAllProducts(): Promise<productDto[]>{
         return await this.productService.getAllProducts();
     }
 

@@ -9,7 +9,7 @@ import { throwError } from 'rxjs';
 export class ProductService {
     constructor(@InjectModel('Product') private readonly productModel: Model<productInterface>){}
 
-    async createProduct(product: productInterface){
+    async createProduct(product: productInterface): Promise<productDto>{
         const createdProduct = await new this.productModel(product);
 
         createdProduct.createdAt = new Date();
@@ -33,13 +33,16 @@ export class ProductService {
         return product;     
     }
 
-    async updateProduct(id: string, updates: Partial<Omit<productInterface, 'createdAt' | 'updatedAt'>>): Promise<any>{
+    async updateProduct(id: string, updates: productInterface): Promise<any>{
         
+        const whitelist: Omit<productInterface, 'createdAt' | 'updatedAt'> = updates;
         
         const updated = await this.productModel.updateOne(
             {_id:id},
-            {...updates,
-            "updatedAt": new Date()
+            {$set:{
+                ...whitelist,
+                "updatedAt": new Date()
+                }
             }
         )
         .exec();
