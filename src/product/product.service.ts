@@ -33,13 +33,13 @@ export class ProductService {
         return product;     
     }
 
-    async updateProduct(id: string, property: string, value: string): Promise<any>{
+    async updateProduct(id: string, updates: Partial<Omit<productInterface, 'createdAt' | 'updatedAt'>>): Promise<any>{
         
         
         const updated = await this.productModel.updateOne(
             {_id:id},
-            {[property]: value,
-            "updatedAt": Date()
+            {...updates,
+            "updatedAt": new Date()
             }
         )
         .exec();

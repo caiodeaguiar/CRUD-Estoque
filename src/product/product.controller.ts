@@ -23,11 +23,8 @@ export class ProductController {
     }
 
     @Put(':id')
-    public async updateProduct(@Param('id') id: string, @Query() query): Promise<productDto>{
-        const property = await query.property;
-        const value = await query.value;
-
-        return await this.productService.updateProduct(id, property, value);
+    public async updateProduct(@Param('id') id: string, @Body() updates: productInterface): Promise<productDto>{
+        return await this.productService.updateProduct(id, updates);
     }
     
 
